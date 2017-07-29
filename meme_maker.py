@@ -4,21 +4,20 @@ from PIL import ImageDraw, ImageFont, Image
 
 
 def input_par():
-    print('Enter the text to insert in image: ')
-    text = str(input())
-    print('Enter the desired size: ')
-    size = int(input())
-    print('Enter the color for the text(r, g, b): ')
-    color_value = [int(i) for i in input().split(' ')]
+    text = input('Enter the text to insert in image: ')
+    size = int(input('Enter the desired size: '))
+    color_value = input('Enter the color for the text(r, g, b): ')).split()
+    color_value = [int(i) for i in color_value.split()]
+    
     return text, size, color_value
-    pass
 
 
 def main():
-    path_to_image = sys.argv[1]
-    image_file = Image.open(path_to_image + '.jpg')
+    assert len(sys.argv) == 2  # python3 meme_maker.py <path-to-image>
+    
+    image_file = Image.open("%s.jpg" % sys.argv[1])
     image_file = image_file.convert("RGBA")
-    pixdata = image_file.load()
+    pixel_data = image_file.load()
 
     print(image_file.size)
     text, size, color_value = input_par()
@@ -30,17 +29,13 @@ def main():
     for y in range(100):
         for x in range(100):
             pixdata[x, y] = (255, 255, 255, 255)
-    image_file.show()
 
     # Drawing text on the picture
     draw = ImageDraw.Draw(image_file)
     draw.text((0, 2300), text, (color_value[0], color_value[1], color_value[2]), font=font)
     draw = ImageDraw.Draw(image_file)
-
-    print('Enter the file name: ')
-    file_name = str(input())
-    image_file.save(file_name + ".jpg")
-    pass
+    image_file.save("%s.jpg" % input("File Name: "))
+    return True
 
 
 if __name__ == '__main__':
